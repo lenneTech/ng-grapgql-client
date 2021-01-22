@@ -78,11 +78,9 @@ export class GraphQLService {
         }
 
         // Prepare request
-        const documentNode = fields ? gql(
-          config.type + '{\n' + graphql + args + fields + '\n}'
-        ) : gql(
-          config.type + '{\n' + graphql + args + '\n}'
-        );
+        const documentNode = fields
+          ? gql(config.type + '{\n' + graphql + args + fields + '\n}')
+          : gql(config.type + '{\n' + graphql + args + '\n}');
 
         const request: any = {};
         request[config.type] = documentNode;
@@ -90,9 +88,7 @@ export class GraphQLService {
         const func = config.type === GraphQLRequestType.MUTATION ? 'mutate' : config.type;
         (this.apollo as any)[func](request).subscribe(
           (result: any) => {
-            const data = result?.data?.[graphql] !== undefined
-              ? result.data[graphql]
-              : result;
+            const data = result?.data?.[graphql] !== undefined ? result.data[graphql] : result;
 
             // Direct data
             if (!config.model) {
@@ -192,17 +188,17 @@ export class GraphQLService {
 
           result.push(
             key +
-            ': ' +
-            (typeof value === 'string' || typeof value === 'boolean'
-              ? allowed[key].isEnum
-                ? value
-                : typeof value === 'string'
+              ': ' +
+              (typeof value === 'string' || typeof value === 'boolean'
+                ? allowed[key].isEnum
+                  ? value
+                  : typeof value === 'string'
                   ? `"""${value.replace(/"/g, '\\"')}"""`
                   : value
-              : this.prepareArguments(value, {
-                level: level + 1,
-                allowed: allowed[key]
-              }))
+                : this.prepareArguments(value, {
+                    level: level + 1,
+                    allowed: allowed[key],
+                  }))
           );
         }
       }
