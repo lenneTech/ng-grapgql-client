@@ -39,7 +39,9 @@ export class GraphQLPlusService extends GraphQLService {
           subscriber.complete();
         },
         (error) => {
-          this.handleError(error, options.excludedErrors);
+          if (!options.ignoreErrors) {
+            this.handleError(error, options.excludedErrors);
+          }
           subscriber.error(error);
           this.handleLoader('stop', options);
           subscriber.complete();

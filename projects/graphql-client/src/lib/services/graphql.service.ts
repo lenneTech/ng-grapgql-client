@@ -50,8 +50,17 @@ export class GraphQLService {
       // Get meta
       this.graphQLMetaService.getMeta().subscribe((meta) => {
         // Prepare fields
-        const allowedFields = meta.getFields(graphql, { type: config.type });
-        let fields = this.prepareFields(config.fields, { allowed: allowedFields });
+        let fields;
+        let allowedFields;
+
+        if (config.fields) {
+          allowedFields = meta.getFields(graphql, { type: config.type });
+
+          fields = this.prepareFields(config.fields, {
+            allowed: allowedFields,
+          });
+        }
+
         if (fields && !fields.startsWith('{')) {
           fields = '{' + fields + '\n}';
         }
@@ -69,14 +78,21 @@ export class GraphQLService {
         }
 
         // Prepare request
-        const documentNode = gql(config.type + '{\n' + graphql + args + fields + '\n}');
+        const documentNode = fields ? gql(
+          config.type + '{\n' + graphql + args + fields + '\n}'
+        ) : gql(
+          config.type + '{\n' + graphql + args + '\n}'
+        );
+
         const request: any = {};
         request[config.type] = documentNode;
 
         const func = config.type === GraphQLRequestType.MUTATION ? 'mutate' : config.type;
         (this.apollo as any)[func](request).subscribe(
           (result: any) => {
-            const data = result?.data?.[graphql] ? result.data[graphql] : result;
+            const data = result?.data?.[graphql] !== undefined
+              ? result.data[graphql]
+              : result;
 
             // Direct data
             if (!config.model) {
@@ -163,7 +179,7 @@ export class GraphQLService {
           continue;
         }
 
-        if (value) {
+        if (value !== undefined) {
           if (Array.isArray(value)) {
             result.push(
               key +
@@ -176,12 +192,17 @@ export class GraphQLService {
 
           result.push(
             key +
-              ': ' +
-              (typeof value === 'string'
-                ? allowed[key].isEnum
-                  ? value
-                  : `"""${value.replace(/"/g, '\\"')}"""`
-                : this.prepareArguments(value, { level: level + 1, allowed: allowed[key] }))
+            ': ' +
+            (typeof value === 'string' || typeof value === 'boolean'
+              ? allowed[key].isEnum
+                ? value
+                : typeof value === 'string'
+                  ? `"""${value.replace(/"/g, '\\"')}"""`
+                  : value
+              : this.prepareArguments(value, {
+                level: level + 1,
+                allowed: allowed[key]
+              }))
           );
         }
       }
