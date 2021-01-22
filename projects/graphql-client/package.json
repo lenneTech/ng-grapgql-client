@@ -1,10 +1,26 @@
 {
   "name": "@lenne.tech/ng-graphql-client",
   "description": "An Angular Module for communicate white an GraphQL Server.",
-  "version": "0.0.3-alpha",
+  "keywords": [
+    "angular",
+    "apollo",
+    "graphql",
+    "apollo-client",
+    "apollo-angular",
+    "angular-library",
+    "angular11+"
+  ],
+  "version": "0.1.0",
   "author": "Pascal Klesse",
   "homepage": "http://lenne.tech",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lenneTech/ng-graphql-client"
+  },
+  "bugs": {
+    "url": "https://github.com/lenneTech/ng-graphql-client/issues"
+  },
   "peerDependencies": {
     "@angular/common": "^11.0.4",
     "@angular/core": "^11.0.4"
