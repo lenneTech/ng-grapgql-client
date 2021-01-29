@@ -95,10 +95,11 @@ export class GraphQLMetaService {
    * Get meta for API
    * See https://www.apollographql.com/blog/three-ways-to-represent-your-graphql-schema-a41f4175100d
    */
-  public getMeta(options: { cache?: boolean } = {}): Observable<GraphQLMeta> {
+  public getMeta(options: { cache?: boolean; log?: boolean } = {}): Observable<GraphQLMeta> {
     // Get configurations
     const config = {
       cache: true,
+      log: false,
       ...options,
     };
 
@@ -114,6 +115,11 @@ export class GraphQLMetaService {
     // Request schema from server
     const observable = this.getSchema(options).pipe(
       map((schema: any) => {
+        // Log
+        if (config.log) {
+          console.log({ schema });
+        }
+
         this._meta = new GraphQLMeta(schema);
         return this._meta;
       })

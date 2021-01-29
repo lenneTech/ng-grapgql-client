@@ -45,10 +45,15 @@ export class GraphQLService {
       config.fields = new config.fields();
     }
 
+    // Log
+    if (config.log) {
+      console.log({ config });
+    }
+
     // Send request
     return new Observable((subscriber) => {
       // Get meta
-      this.graphQLMetaService.getMeta().subscribe((meta) => {
+      this.graphQLMetaService.getMeta({ log: config.log }).subscribe((meta) => {
         // Prepare fields
         let fields;
         let allowedFields;
@@ -59,6 +64,11 @@ export class GraphQLService {
           fields = this.prepareFields(config.fields, {
             allowed: allowedFields,
           });
+        }
+
+        // Log
+        if (config.log) {
+          console.log({ fields });
         }
 
         if (fields && !fields.startsWith('{')) {
@@ -84,6 +94,11 @@ export class GraphQLService {
 
         const request: any = {};
         request[config.type] = documentNode;
+
+        // Log
+        if (config.log) {
+          console.log({ request });
+        }
 
         const func = config.type === GraphQLRequestType.MUTATION ? 'mutate' : config.type;
         (this.apollo as any)[func](request).subscribe(
