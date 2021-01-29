@@ -190,7 +190,7 @@ export class GraphQLService {
           continue;
         }
 
-        if (value !== undefined) {
+        if (value !== undefined && value !== null) {
           if (Array.isArray(value)) {
             result.push(
               key +
