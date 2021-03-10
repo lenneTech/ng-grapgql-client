@@ -204,11 +204,15 @@ export class GraphQLService {
           result.push(
             key +
               ': ' +
-              (typeof value === 'string' || typeof value === 'boolean'
+              (typeof value === 'string' ||
+              typeof value === 'boolean' ||
+              Object.prototype.toString.call(value) === '[object Date]'
                 ? allowed[key].isEnum
                   ? value
                   : typeof value === 'string'
                   ? `"""${value.replace(/"/g, '\\"')}"""`
+                  : Object.prototype.toString.call(value) === '[object Date]'
+                  ? `"""${(value as Date).toString()}"""`
                   : value
                 : this.prepareArguments(value, {
                     level: level + 1,
