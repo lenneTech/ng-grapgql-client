@@ -68,3 +68,28 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ### Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Test the package
+
+```bash
+npm run pack
+```
+
+Afterwards, the package can be included in an Angular project as follows in the `package.json` on a test basis:
+```json
+{
+  "dependencies": {
+    "@lenne.tech/ng-graphql-client": "file:/PATH_TO_PROJECT/ng-graphql-client/dist/graphql-client/lenne.tech-ng-graphql-client-0.1.7.tgz"
+  }
+}
+```
+
+## Publish
+
+Update version in `projects/graphql-client/package.json` and `projects/graphql-client/package-lock.json`.
+
+After that, the new package can be published as follows:
+```bash
+npm publish
+```
+
