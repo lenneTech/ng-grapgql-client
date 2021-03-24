@@ -90,6 +90,6 @@ Update version in `projects/graphql-client/package.json` and `projects/graphql-c
 
 After that, the new package can be published as follows:
 ```bash
-npm publish
+npm run publish
 ```
 
