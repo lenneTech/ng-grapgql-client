@@ -1,6 +1,8 @@
-** deprecated **
+# !!! deprecated !!!
 
 This package is deprecated, please use [@lenne.tech/ng-base](https://github.com/lenneTech/ng-base/) instead. It contains all the features of @lenne.tech/ng-graphql-client and many more.
+
+----
 
 # NgGraphqlClient
 
